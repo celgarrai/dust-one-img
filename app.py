@@ -19,7 +19,7 @@ def load_model(url):
         return None
 
 # URL du modèle .h5
-model_url = "https://wis2live.marocmeteo.ma/h5/best_model_seg.h5"
+model_url = "http://wis2live.marocmeteo.ma/h5/best_model_seg.h5"
 model = load_model(model_url)
 
 # Fonction pour prétraiter l'image
