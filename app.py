@@ -4,6 +4,7 @@ import numpy as np
 import tensorflow as tf
 import requests
 from io import BytesIO
+import tempfile
 
 # Charger le modèle TensorFlow .h5 depuis un lien externe
 @st.cache_resource
@@ -12,7 +13,14 @@ def load_model(url):
         # Télécharger le fichier depuis le lien externe
         response = requests.get(url)
         response.raise_for_status()  # Vérifier si la requête a réussi
-        model = tf.keras.models.load_model(BytesIO(response.content))
+        
+        # Créer un fichier temporaire pour sauvegarder le modèle
+        temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".h5")
+        temp_file.write(response.content)
+        temp_file.close()
+        
+        # Charger le modèle depuis le fichier temporaire
+        model = tf.keras.models.load_model(temp_file.name)
         return model
     except Exception as e:
         st.error(f"Erreur lors du chargement du modèle : {e}")
